@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+<!--        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/base3cm13v2</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">admin</property>
+        <property name="connection.pool_size">1</property>-->
+        
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://ec2-174-129-37-144.compute-1.amazonaws.com:5432/d52fhuga0cbijr</property>
+        <property name="connection.username">xeuypkajvsxnme</property>
+        <property name="connection.password">8a7dbc29094673aa7ffe757ccf3b91b8efa90dcae15a2df8d3517d226ada74ba</property>
+        <property name="connection.pool_size">1</property>
+        
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="show_sql">true</property>
+        
+        <property name="current_session_context_class">thread</property>  
+<!--        Si el proyecto se realizara sobre una base de datos ya poblada 
+        se recomienda usar: none      -->
+<!--        Si se esta actualizando una base de datos existente adicionando una nueva tabla, etc
+        se recomienda usar: update      -->
+        <property name="hbm2ddl.auto">update</property>
+        
+        <property name="hibernate.dbcp.initialZise">5</property>
+        <property name="hibernate.dbcp.maxTotal">20</property>
+        <property name="hibernate.dbcp.maxIdle">10</property>
+        <property name="hibernate.dbcp.minIdle">5</property>
+        <property name="hibernate.dbcp.maxWaitMillis">-1</property>
+        
+        <!-- Definiciones de Entidades -->        
+        <mapping class="com.ipn.mx.modelo.entidades.Categoria"/>
+        <mapping class="com.ipn.mx.modelo.entidades.Producto"/>
+        <mapping class="com.ipn.mx.modelo.entidades.Usuario"/>                     
+
+    </session-factory>
+</hibernate-configuration>

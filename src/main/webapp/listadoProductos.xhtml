@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Productos</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    </h:head>
+    <h:body>
+        <f:view>
+            <h:form id="frmProductos">
+
+                <p:growl id="messages"/>
+                <p:menubar rendered="#{sesionMB.modoUnlogged}">
+                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+                    <p:divider layout="vertical"/>
+                    <f:facet name="options">
+                        <p:commandButton value="Registrarse" icon="pi pi-fw pi-user-plus" 
+                                         styleClass="ui-button-secondary" action="#{usuarioMB.preparedAdd()}"/>
+                        <p:commandButton value="Iniciar Sesión" icon="pi pi-fw pi-sign-in" 
+                                         styleClass="ui-button-info" action="#{sesionMB.preparedLogin()}"/>
+                    </f:facet>
+                </p:menubar>                
+                
+                <p:menubar rendered="#{sesionMB.modoUser}">
+                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+                    <p:divider layout="vertical"/>
+                    <p:submenu label="#{msg['menu.categoria.titulo']}" icon="pi pi-fw pi-tag">
+                        <p:menuitem value="Lista de Categorias" icon="pi pi-fw pi-tags" 
+                                    action="#{indexMB.preparedListadoCategorias()}"/>
+                    </p:submenu>
+                    <p:submenu label="#{msg['menu.producto.titulo']}" icon="pi pi-fw pi-clone">
+                        <p:menuitem value="Lista de Productos" icon="pi pi-fw pi-clone" 
+                                    action="#{indexMB.preparedListadoProductos()}"/>
+                    </p:submenu>
+                    <f:facet name="options">
+                        <p:commandButton value="Cerrar Sesión" icon="pi pi-fw pi-sign-out" 
+                                         styleClass="ui-button-secondary" action="#{sesionMB.cerrarSesion()}"
+                                         rendered="#{sesionMB.modoUser}"/>
+                    </f:facet>
+                </p:menubar>
+            
+                <p:menubar rendered="#{sesionMB.modoAdmin}">
+                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+                    <p:divider layout="vertical"/>
+                    <p:submenu label="#{msg['menu.categoria.titulo']}" icon="pi pi-fw pi-tag">
+                        <p:menuitem value="Lista de Categorias" icon="pi pi-fw pi-tags" 
+                                    action="#{indexMB.preparedListadoCategorias()}"/>
+                    </p:submenu>
+                    <p:submenu label="#{msg['menu.producto.titulo']}" icon="pi pi-fw pi-clone">
+                        <p:menuitem value="Lista de Productos" icon="pi pi-fw pi-clone" 
+                                    action="#{indexMB.preparedListadoProductos()}"/>
+                    </p:submenu>
+                    <p:submenu label="#{msg['menu.usuario.titulo']}" icon="pi pi-fw pi-user">
+                        <p:menuitem value="Lista de Usuarios" icon="pi pi-fw pi-users" 
+                                    action="#{indexMB.preparedListadoUsuarios()}"/>
+                    </p:submenu>
+                    <f:facet name="options">
+                        <p:commandButton value="Cerrar Sesión" icon="pi pi-fw pi-sign-out" 
+                                         styleClass="ui-button-secondary" action="#{sesionMB.cerrarSesion()}"
+                                         rendered="#{sesionMB.modoAdmin}"/>
+                    </f:facet>
+                </p:menubar>
+
+                <div class="container">
+
+                    <br/>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+
+                            <h2 class="text-secondary">
+                                <h:outputText value="#{msg['producto.encabezado.listado']}"/>
+                            </h2>
+
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right" rendered="#{!sesionMB.modoUnlogged}">
+                            <p:commandButton value="Ver Grafica" action="#{productoMB.preparedGrafica()}"
+                                                 immediate="true"
+                                                 styleClass="ui-button-help">
+                                </p:commandButton>
+                             <a href="ReporteServlet?reporte=productos" class="btn btn-outline-danger" target="_blank">Abrir Reporte</a>
+                            <p:commandButton value="#{msg['producto.boton.nuevo']}" action="#{productoMB.preparedAdd()}"
+                                             immediate="true">
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <br/>
+
+                    <p:panel header="#{msg['producto.tabla.titulo']}" rendered="#{!sesionMB.modoUnlogged}">   
+                        <p:dataTable var="dto"
+                                     value="#{productoMB.listaProducto}" 
+                                     rows="5"
+                                     paginator="true"
+                                     class="table">
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblIdProducto" value="#{msg['producto.tabla.claveProducto']}"/>
+                                </f:facet>
+
+
+                                <p:commandLink action="#{productoMB.preparedVisualise()}" actionListener="#{productoMB.seleccionarProducto}" immediate="true" class="btn btn-outline-warning">
+                                    <f:param name="claveSel" value="#{dto.idProducto}"/>
+                                    <p:outputLabel value="#{dto.idProducto}"/>
+                                </p:commandLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblNombreProducto" value="#{msg['producto.tabla.nombreProducto']}"/>
+                                </f:facet>
+                                <p:outputLabel value="#{dto.nombreProducto}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblDescripcionProducto" value="#{msg['producto.tabla.descripcionProducto']}"/>
+                                </f:facet>
+                                <p:outputLabel value="#{dto.descripcionProducto}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblExistenciaProducto" value="#{msg['producto.tabla.existenciaProducto']}"/>
+                                </f:facet>
+                                <p:outputLabel value="#{dto.existencia}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblPrecioProducto" value="#{msg['producto.tabla.precioProducto']}"/>
+                                </f:facet>
+                                <p:outputLabel value="#{dto.precio}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel id="lblClaveCategoria" value="#{msg['producto.tabla.claveCategoria']}"/>
+                                </f:facet>
+                                <p:outputLabel value="#{dto.idCategoria.nombreCategoria}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="#{msg['producto.tabla.editar']}"/>
+                                </f:facet>
+                                <p:commandLink action="#{productoMB.preparedUpdate()}" 
+                                               actionListener="#{productoMB.seleccionarProducto}" 
+                                               immediate="true" class="btn btn-outline-info">
+                                    <f:param name="claveSel" value="#{dto.idProducto}"/>
+                                    <p:outputLabel value="#{msg['producto.boton.actualizar']}"/>
+                                </p:commandLink>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="#{msg['producto.tabla.eliminar']}"/>
+                                </f:facet>
+                                <p:commandLink action="#{productoMB.delete()}" 
+                                               actionListener="#{productoMB.seleccionarProducto}" 
+                                               immediate="true" class="btn btn-outline-danger">
+                                    <f:param name="claveSel" value="#{dto.idProducto}"/>
+                                    <p:outputLabel value="#{msg['producto.boton.borrar']}"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+
+
+                    <center>
+                        <p:panel header="Sesion Requerida" rendered="#{sesionMB.modoUnlogged}"
+                                 style="width: 20rem;">
+                            <p:commandLink action="#{sesionMB.cerrarSesion()}" immediate="true" class="btn btn-outline-primary d-block">
+                                <p:outputLabel value="Regresar al Inicio"/>
+                            </p:commandLink>
+                        </p:panel>
+                    </center>
+                </div>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+
