@@ -14,6 +14,7 @@
             <h:form id="frmCategorias">
 
                 <p:growl id="messages"/>
+                
                 <p:menubar rendered="#{sesionMB.modoUnlogged}">
                     <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
                     <p:divider layout="vertical"/>
@@ -101,8 +102,9 @@
 
                             <p:dataTable var="dto" 
                                          value="#{categoriaMB.listaCategorias}" 
-                                         rows="5"
+                                         
                                          paginator="true"
+                                         rowsPerPageTemplate="10,20,30"
                                          class="table">
                                 <p:column>
                                     <f:facet name="header">
@@ -115,16 +117,13 @@
                                         <h:outputText value="#{dto.idCategoria}"/>
                                     </p:commandLink>
                                 </p:column>
-                                <p:column>
+                                <p:column filterBy="#{dto.nombreCategoria}" filterMatchMode="contains">
                                     <f:facet name="header">
                                         <h:outputLabel id="lblNombreCategoria" value="#{msg['categoria.tabla.nombre']}"/>
                                     </f:facet>
                                     <p:outputLabel value="#{dto.nombreCategoria}"/>
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputLabel id="lblDescripcionCategoria" value="#{msg['categoria.tabla.descripcion']}"/>
-                                    </f:facet>
+                                <p:column headerText="#{msg['categoria.tabla.descripcion']}" filterBy="#{dto.nombreCategoria}" filterMatchMode="contains">
                                     <p:outputLabel value="#{dto.descripcionCategoria}"/>
                                 </p:column>
 

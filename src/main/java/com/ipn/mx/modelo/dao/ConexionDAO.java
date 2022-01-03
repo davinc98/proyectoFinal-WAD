@@ -17,9 +17,9 @@ public class ConexionDAO {
     
     private Connection conexion;
     public Connection conectar(){
-        String user = "xeuypkajvsxnme";
-        String pwd = "8a7dbc29094673aa7ffe757ccf3b91b8efa90dcae15a2df8d3517d226ada74ba";
-        String url="jdbc:postgresql://ec2-174-129-37-144.compute-1.amazonaws.com:5432/d52fhuga0cbijr";
+        String user = "kkabazptrxlnez";
+        String pwd = "f3963ccfcf4d86ccda2b5eab8547b43b33f601deab38753711e4d6f323273cad";
+        String url="jdbc:postgresql://ec2-54-174-43-13.compute-1.amazonaws.com:5432/d9da4c8pst3ldd";
         String pgDriver = "org.postgresql.Driver";
         
         try{
