@@ -103,17 +103,20 @@
                     </p:panel>
                 </center>
             </h:form>
-            <p:fieldset legend="Hola mundo subir imagen">
-                <div class="card">
-                    <h5>Subir imagen</h5>
-                    <h:form enctype="multipart/form-data">
-                        <p:fileUpload value="#{usuarioMB.file}" mode="simple" skinSimple="true"/>
 
-                        <p:commandButton value="Submit" ajax="false" action="#{usuarioMB.upload()}" styleClass="p-mt-3 ui-button-outlined p-d-block"/>
-                    </h:form>
-                </div>
-
-
+            <p:fieldset>     
+                <form method="post" action="FileServlet" enctype="multipart/form-data">
+                    <!--                        <p:fileUpload name="txtImagen" 
+                                                               id="txtImagen" mode="simple" skinSimple="true"/>-->
+                    <input type="file" 
+                           name="fileImagen" 
+                           id="fileImagen" 
+                           placeholder="Subir imagen"
+                           maxlenght="100"
+                           value="Seleccionar imagen"
+                           class="form-control" />
+                    <button type="submit" class="btn btn-outline-primary">Subir</button>   
+                </form>
             </p:fieldset>
         </f:view>
     </h:body>

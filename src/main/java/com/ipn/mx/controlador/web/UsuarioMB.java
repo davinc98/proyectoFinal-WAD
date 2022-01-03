@@ -5,13 +5,9 @@
  */
 package com.ipn.mx.controlador.web;
 
-import com.ipn.mx.modelo.dao.FileDAO;
 import com.ipn.mx.modelo.dao.UsuarioDAO;
 import com.ipn.mx.modelo.entidades.Usuario;
 import com.ipn.mx.utilerias.EnviarMail;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,12 +16,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -176,68 +170,5 @@ public class UsuarioMB extends BaseBean implements Serializable {
             e.printStackTrace();
         }
     }
-    
-    
-    private UploadedFile file;
-    
-    public void savePhoto(Usuario usr, InputStream inputstream) throws IOException{
-        logger.log(Level.INFO, "Antes del directorio.");
-        File directory = new File("http://localhost:8080/proyecoFinal/faces");
-        logger.log(Level.INFO, "Directorio:"+directory.toString());
-        FileDAO filedao = new FileDAO();
-        
-        File file = new File("http://localhost:8080/proyecoFinal/faces",getUniqueName());
-         logger.log(Level.INFO, "Guardando:"+file.getName());
-        filedao.save(inputstream, file);
-        
-        logger.log(Level.INFO, "Directorio:"+file.toString());
-        
-        usr.setImagen(file.toString());
-        
-        logger.log(Level.INFO, "Subiendo imagen a "+file.toString());
-    }
-
-    public void upload() {
-        
-        if (file != null) {
-            logger.log(Level.INFO, "Iniciando subir imagen.");
-            try {
-                InputStream inputstream = file.getInputStream();
-                Usuario usr = new Usuario();              
-                
-                savePhoto(usr, inputstream);
-                //Guardar usuario
-                
-                FacesMessage message = new FacesMessage("Successful", file.getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                FacesMessage message = new FacesMessage("Error", file.getFileName() + " no uploaded.");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-            }
-            
-        }
-    }
-
-    public UploadedFile getFile() {
-        return file;
-    }
-
-    public void setFile(UploadedFile file) {
-        this.file = file;
-    }
-
-    private String getUniqueName() {
-        String imagePrefix = "Usr-";
-        String imageSufix = ".jpg";
-        String middle = "";
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-        middle = sdf.format(new Date());
-        
-        return imagePrefix+middle+imageSufix;
-    }
-
-
 
 }
