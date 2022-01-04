@@ -14,21 +14,43 @@
             <h:form id="frmCategorias">
 
                 <p:growl id="messages"/>
-                
-                <p:menubar rendered="#{sesionMB.modoUnlogged}">
-                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+
+                                <p:menubar>
+                    <p:menuitem action="#{indexMB.preparedCredits()}">
+                        <b>TechShop</b>
+                    </p:menuitem>
                     <p:divider layout="vertical"/>
+                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+
+
                     <f:facet name="options">
                         <p:commandButton value="Registrarse" icon="pi pi-fw pi-user-plus" 
-                                         styleClass="ui-button-secondary" action="#{usuarioMB.preparedAdd()}"/>
+                                         styleClass="ui-button-secondary" action="#{usuarioMB.preparedAdd()}"
+                                         rendered="#{sesionMB.modoUnlogged}"/>
                         <p:commandButton value="Iniciar Sesión" icon="pi pi-fw pi-sign-in" 
-                                         styleClass="ui-button-info" action="#{sesionMB.preparedLogin()}"/>
+                                         styleClass="ui-button-info" action="#{sesionMB.preparedLogin()}"
+                                         rendered="#{sesionMB.modoUnlogged}"/>
+                        <p:commandButton value="Cerrar Sesión" icon="pi pi-fw pi-sign-out" 
+                                         styleClass="ui-button-secondary" action="#{sesionMB.cerrarSesion()}"
+                                         rendered="#{!sesionMB.modoUnlogged}"/>
+                    </f:facet>
+                </p:menubar>  
+
+                <p:menubar rendered="#{sesionMB.modoUnlogged}">
+                    <p:menuitem value="Categorias" icon="pi pi-fw pi-tags" 
+                                action="#{indexMB.preparedListadoCategorias()}"/>
+                    <p:divider layout="vertical"/>
+                    <p:menuitem value="Productos" icon="pi pi-fw pi-clone" 
+                                action="#{indexMB.preparedListadoProductos()}"/>
+
+
+                    <f:facet name="options">
+
                     </f:facet>
                 </p:menubar>                
-                
+
                 <p:menubar rendered="#{sesionMB.modoUser}">
-                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
-                    <p:divider layout="vertical"/>
+
                     <p:submenu label="#{msg['menu.categoria.titulo']}" icon="pi pi-fw pi-tag">
                         <p:menuitem value="Lista de Categorias" icon="pi pi-fw pi-tags" 
                                     action="#{indexMB.preparedListadoCategorias()}"/>
@@ -38,14 +60,12 @@
                                     action="#{indexMB.preparedListadoProductos()}"/>
                     </p:submenu>
                     <f:facet name="options">
-                        <p:commandButton value="Cerrar Sesión" icon="pi pi-fw pi-sign-out" 
-                                         styleClass="ui-button-secondary" action="#{sesionMB.cerrarSesion()}"
-                                         rendered="#{sesionMB.modoUser}"/>
+
                     </f:facet>
                 </p:menubar>
-            
+
                 <p:menubar rendered="#{sesionMB.modoAdmin}">
-                    <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
+
                     <p:divider layout="vertical"/>
                     <p:submenu label="#{msg['menu.categoria.titulo']}" icon="pi pi-fw pi-tag">
                         <p:menuitem value="Lista de Categorias" icon="pi pi-fw pi-tags" 
@@ -60,9 +80,6 @@
                                     action="#{indexMB.preparedListadoUsuarios()}"/>
                     </p:submenu>
                     <f:facet name="options">
-                        <p:commandButton value="Cerrar Sesión" icon="pi pi-fw pi-sign-out" 
-                                         styleClass="ui-button-secondary" action="#{sesionMB.cerrarSesion()}"
-                                         rendered="#{sesionMB.modoAdmin}"/>
                     </f:facet>
                 </p:menubar>
 
@@ -70,9 +87,9 @@
                 <div class="container">
                     <center>
 
-                        
+
                         <br/>
-                        <p:toolbar>
+                        <p:toolbar rendered="#{!sesionMB.modoUnlogged}">
                             <p:toolbarGroup>
 
                                 <h2 class="text-secondary">
@@ -81,7 +98,7 @@
 
                             </p:toolbarGroup>
                             <p:toolbarGroup align="right" rendered="#{!sesionMB.modoUnlogged}">
-                                 <p:commandButton value="Ver Grafica" action="#{categoriaMB.preparedGrafica()}"
+                                <p:commandButton value="Ver Grafica" action="#{categoriaMB.preparedGrafica()}"
                                                  immediate="true"
                                                  styleClass="ui-button-help">
                                 </p:commandButton>
@@ -102,7 +119,7 @@
 
                             <p:dataTable var="dto" 
                                          value="#{categoriaMB.listaCategorias}" 
-                                         
+
                                          paginator="true"
                                          rowsPerPageTemplate="10,20,30"
                                          class="table">
@@ -149,14 +166,24 @@
                             </p:dataTable>
                         </p:panel>
 
-                        <p:panel header="Sesion Requerida" rendered="#{sesionMB.modoUnlogged}"
-                                 style="width: 20rem;">
-                            <p:commandLink action="#{sesionMB.cerrarSesion()}" immediate="true" class="btn btn-outline-primary d-block">
-                                <p:outputLabel value="Regresar al Inicio"/>
-                            </p:commandLink>
+
+
+                        <p:panel header="CATEGORIAS" rendered="#{sesionMB.modoUnlogged}">
+                            <p:dataTable var="dtoc" 
+                                         value="#{categoriaMB.listaCategorias}" 
+                                         class="table">
+
+                                <p:column filterBy="#{dtoc.nombreCategoria}" filterMatchMode="contains">
+                                    <f:facet name="header">
+                                        <h:outputLabel id="lblNombreCategoria" value="#{msg['categoria.tabla.nombre']}"/>
+                                    </f:facet>
+                                    <p:outputLabel value="#{dtoc.nombreCategoria}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['categoria.tabla.descripcion']}" filterBy="#{dtoc.nombreCategoria}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{dtoc.descripcionCategoria}"/>
+                                </p:column>
+                            </p:dataTable>
                         </p:panel>
-
-
                     </center>
                 </div>
 
