@@ -27,7 +27,7 @@
                         <div class="card card-body">
                             <form method="post" action="FileServlet?accion=update" enctype="multipart/form-data">
                                 <input type="text" id="txtIdUsuario" name="txtIdUsuario"
-                                       value="<%= request.getParameter("idUsuario") %>"/>
+                                       value="<%= request.getParameter("idUsuario") %>" hidden="true"/>
                                 <!--                        <p:fileUpload name="txtImagen" 
                                                                            id="txtImagen" mode="simple" skinSimple="true"/>-->
                                 <img src="images/user.png" width="200"
@@ -46,7 +46,7 @@
                             <hr/>
                             <form method="post" action="FileServlet?accion=cancel" enctype="multipart/form-data">
                                 <input type="text" id="txtIdUsuario" name="txtIdUsuario" 
-                                       value="<%= request.getParameter("idUsuario") %>" />
+                                       value="<%= request.getParameter("idUsuario") %>" hidden="true"/>
                                 <button type="submit" class="btn btn-outline-primary d-block">Regresar</button>  
                             </form>
 
