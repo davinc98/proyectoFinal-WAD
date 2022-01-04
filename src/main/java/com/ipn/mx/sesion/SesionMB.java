@@ -28,6 +28,7 @@ public class SesionMB extends SesionBean implements Serializable {
 
     private String nombreUsuario = "";
     private String password = "";
+    private String pathImages = "";
     private final Sesion sesion = new Sesion();
 
     private static final Logger logger = Logger.getLogger(SesionMB.class.getName());
@@ -109,4 +110,13 @@ public class SesionMB extends SesionBean implements Serializable {
         this.password = password;
     }
 
+    public String getPathImages() {
+        return pathImages;
+    }
+
+    public void setPathImages(String pathImages) {
+        this.pathImages = pathImages;
+    }
+
+    
 }

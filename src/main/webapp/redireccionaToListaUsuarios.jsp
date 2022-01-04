@@ -15,7 +15,7 @@
     <body>
 
 
-        <% response.sendRedirect("/proyecoFinal/faces/usuarioForm.xhtml");%>
+        <% response.sendRedirect("/proyecoFinal/faces/listadoUsuarios.xhtml?faces-redirect=true");%>
 
     </body>
 </html>

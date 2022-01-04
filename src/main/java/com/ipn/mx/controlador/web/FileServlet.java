@@ -5,8 +5,6 @@
  */
 package com.ipn.mx.controlador.web;
 
-//import com.ipn.mx.modelo.dao.GraficaDAO;
-//import com.ipn.mx.modelo.dto.GraficaDTO;
 import com.ipn.mx.modelo.dao.UsuarioDAO;
 import com.ipn.mx.modelo.entidades.Usuario;
 import java.io.File;
@@ -50,10 +48,31 @@ public class FileServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        almacenarImagen(request, response);
-
-        RequestDispatcher rd = request.getRequestDispatcher("redirecciona.jsp");
+        
+        UsuarioDAO dao = new UsuarioDAO();
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(Integer.parseInt(request.getParameter("txtIdUsuario")));
+        usuario = dao.read(usuario);
+        
+        String accion = request.getParameter("accion");
+        RequestDispatcher rd = request.getRequestDispatcher("redireccionaToLogin.jsp");
+        
+        if(accion.equals("guardar")){
+            usuario.setImagen(almacenarImagen(request, response));
+            rd = request.getRequestDispatcher("redireccionaToLogin.jsp");
+            dao.update(usuario);
+        }else if(accion.equals("omitir")){
+            usuario.setImagen(getPathImageDefault(request, response));
+            rd = request.getRequestDispatcher("redireccionaToLogin.jsp");
+            dao.update(usuario);
+        }else if(accion.equals("update")){
+            usuario.setImagen(almacenarImagen(request, response));
+            rd = request.getRequestDispatcher("redireccionaToListaUsuarios.jsp");
+            dao.update(usuario);
+        }else if(accion.equals("cancel")){
+            rd = request.getRequestDispatcher("redireccionaToListaUsuarios.jsp");
+        }
+   
         rd.forward(request, response);
 
     }
@@ -97,9 +116,10 @@ public class FileServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void almacenarImagen(HttpServletRequest request, HttpServletResponse response) {
+    private String almacenarImagen(HttpServletRequest request, HttpServletResponse response) {
         String pathFiles = request.getRealPath("/");
         File uploads = new File(pathFiles);
+        String fileName="";
 
         //Recuperar la url de la app: https://www.it-swarm-es.com/es/jsp/como-obtener-la-url-del-dominio-y-el-nombre-de-la-aplicacion/968427622/
         String pathConexion = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -112,7 +132,7 @@ public class FileServlet extends HttpServlet {
                 if (esExtensionImagen(part.getSubmittedFileName())) {//Verifica ext
 
                     //Almacenar imagen en el sistema de archivos
-                    String fileName = guardarArchivo(part, uploads, getUniqueName());
+                    fileName = guardarArchivo(part, uploads, getUniqueName());
 
                 } else {
 
@@ -125,7 +145,7 @@ public class FileServlet extends HttpServlet {
         } catch (ServletException ex) {
             Logger.getLogger(FileServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return pathConexion+"faces/images/"+fileName;
     }
 
     private String guardarArchivo(Part part, File pathUploads, String nombreImg) {
@@ -172,5 +192,16 @@ public class FileServlet extends HttpServlet {
         middle = sdf.format(new Date());
 
         return middle;
+    }
+    
+    private String getPathImageDefault(HttpServletRequest request, HttpServletResponse response) {
+        String pathFiles = request.getRealPath("/");
+        File uploads = new File(pathFiles);
+
+        //Recuperar la url de la app: https://www.it-swarm-es.com/es/jsp/como-obtener-la-url-del-dominio-y-el-nombre-de-la-aplicacion/968427622/
+        String pathConexion = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+        logger.log(Level.INFO, pathConexion);
+
+        return pathConexion+"faces/images/user.png";
     }
 }

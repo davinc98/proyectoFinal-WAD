@@ -24,7 +24,7 @@
                                          styleClass="ui-button-info" action="#{sesionMB.preparedLogin()}"/>
                     </f:facet>
                 </p:menubar>                
-                
+
                 <p:menubar rendered="#{sesionMB.modoUser}">
                     <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
                     <p:divider layout="vertical"/>
@@ -42,7 +42,7 @@
                                          rendered="#{sesionMB.modoUser}"/>
                     </f:facet>
                 </p:menubar>
-            
+
                 <p:menubar rendered="#{sesionMB.modoAdmin}">
                     <p:menuitem value="#{msg['menu.inicio.titulo']}" icon="pi pi-fw pi-home" action="#{indexMB.preparedIndex()}"/>
                     <p:divider layout="vertical"/>
@@ -118,26 +118,19 @@
                                 </f:facet>
                                 <h:outputText value="#{dto.materno}"/>
                             </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputLabel id="lblUsuario" value="Usuario"/>
-                                </f:facet>
-                                <h:outputText value="#{dto.nombreUsuario}"/>
-                            </p:column>
+                            <!--                            <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputLabel id="lblUsuario" value="Usuario"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{dto.nombreUsuario}"/>
+                                                        </p:column>-->
 
-                            <!--                                    <h:column>
-                                                                    <f:facet name="header">
-                                                                        <h:outputLabel id="lblPassword" value="Contrasenia"/>
-                                                                    </f:facet>
-                                                                    <h:outputText value="#{dto.claveUsuario}"/>
-                                                                </h:column>-->
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputLabel id="lblEmail" value="Correo"/>
-                                </f:facet>
-                                <h:outputText value="#{dto.email}"/>
-                            </p:column>
+                            <!--                            <p:column>
+                                                            <f:facet name="header">
+                                                                <h:outputLabel id="lblEmail" value="Correo"/>
+                                                            </f:facet>
+                                                            <h:outputText value="#{dto.email}"/>
+                                                        </p:column>-->
 
                             <p:column>
                                 <f:facet name="header">
@@ -146,21 +139,26 @@
                                 <h:outputText value="#{dto.tipoUsuario}"/>
                             </p:column>
 
-                            <!--                                    <h:column>
-                                                                    <f:facet name="header">
-                                                                        <h:outputLabel id="lblImagen" value="Imagen"/>
-                                                                    </f:facet>
-                                                                    <h:outputText value="#{dto.imagen}"/>
-                                                                </h:column>-->
-
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputLabel id="lblImagen" value="Imagen"/>
+                                </f:facet>
+                                <img src="#{dto.imagen}" width="100%"/>
+                                <h:outputText value="#{dto.imagen}"/>
+                            </p:column>
 
                             <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Editar"/>
                                 </f:facet>
-                                <h:commandLink action="#{usuarioMB.preparedUpdate()}" actionListener="#{usuarioMB.seleccionarUsuario}" immediate="true" class="btn btn-outline-info">
+                                <h:commandLink action="#{usuarioMB.preparedUpdateImage()}" actionListener="#{usuarioMB.seleccionarUsuario}" immediate="true" class="btn btn-outline-info d-block">
                                     <f:param name="claveSel" value="#{dto.idUsuario}"/>
-                                    Actualizar
+                                    <f:param name="idUsuario" value="#{dto.idUsuario}"/>
+                                    Cambiar Imagen
+                                </h:commandLink>
+                                <h:commandLink action="#{usuarioMB.preparedUpdate()}" actionListener="#{usuarioMB.seleccionarUsuario}" immediate="true" class="btn btn-outline-info d-block">
+                                    <f:param name="claveSel" value="#{dto.idUsuario}"/>
+                                    Actualizar Informacion
                                 </h:commandLink>
                             </p:column>
 
@@ -176,7 +174,7 @@
                         </p:dataTable>
 
                     </p:panel>
-                    
+
                     <center>
                         <p:panel header="Sesion Requerida" rendered="#{sesionMB.modoUnlogged}"
                                  style="width: 20rem;">
